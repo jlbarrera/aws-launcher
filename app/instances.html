@@ -1,0 +1,35 @@
+<div ng-show="!loggedIn">Please, login</div>
+
+<div ng-hide="!loggedIn">
+
+  <div ng-show="!instances.length">Loading...</div>
+
+  <div class="row">
+    <div ng-show="instances" ng-repeat="instance in instances" class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <img src="images/wordpress.jpg" alt="wordpress">
+        <div class="caption">
+          <h3>
+            <a ng-show="instance.State.Code == '16'" href="http://{{ instance.PublicDnsName }}" target="_blank">
+              <span class="glyphicon glyphicon-link" aria-hidden="true"></span> {{ instance.KeyName }}
+            </a>
+            <span ng-hide="instance.State.Code == '16'">{{ instance.KeyName }}</span> 
+            <small>
+              <label class="label" 
+                     ng-class="{ 
+                        'label-danger': instance.State.Code == 80, 
+                        'label-success': instance.State.Code == 16, 
+                        'label-warning': instance.State.Code != 16 && instance.State.Code != 80,
+                    }">{{ instance.State.Name }}
+              </label>              
+            </small>            
+          </h3>          
+          <div>
+            <button class="btn btn-primary" ng-click="start(instance)" ng-class="{'disabled': instance.State.Code != 80}">{{ start_button_name(instance) }}</button>
+            <a href="" role="button" class="btn btn-warning" ng-class="{'disabled': instance.State.Code != 16}" ng-click="stop(instance)">{{ stop_button_name(instance) }}</a>
+            <button class="btn btn-danger" ng-class="{'disabled': instance.State.Code == 48}" ng-click="terminate(instance)">{{ terminate_button_name(instance) }}</button>                                   
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
